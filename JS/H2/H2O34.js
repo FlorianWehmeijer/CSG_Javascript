@@ -134,6 +134,10 @@ function draw() {
   alice.toon();
   bob.toon();
   
+ if (alice.x == bob.x && alice.y == bob.y) {
+   bob.beweeg();
+  }
+
   if (eve.wordtGeraakt(alice) || eve.wordtGeraakt(bob)) {
     noLoop();
   }

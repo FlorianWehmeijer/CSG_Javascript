@@ -149,4 +149,5 @@ function draw() {
     text("Je hebt gewonnen!",30,300);
     noLoop();
   }
+
 }

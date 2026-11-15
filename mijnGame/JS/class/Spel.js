@@ -4,19 +4,20 @@ class Spel {
     this.level = null;
     this.score = null;
     this.toestand = null;
+    this.speler = new Speler();
   }
 
   nieuwSpel() {
     this.wave = 1;
     this.score = 0;
-    this.toestand = 'begin';
+    this.toestand = 'homescreen';
   }
 
 
   verwerkInvoer() {
     console.log('key: '+key+'   keyCode: '+keyCode);
 
-    if (this.toestand == 'begin') {
+    if (this.toestand == 'homescreen') {
       // Spatie
       if (keyCode == 32) {
         this.toestand = 'spelen';
@@ -60,7 +61,7 @@ class Spel {
     pop();
   }
 
-  tekenBeginScherm() {
+  tekenHomeScreen() {
     background('#fec013');
     this.tekenTekst('Klaar voor het spel?\nDruk spatie om te starten','black');
   }
@@ -68,7 +69,7 @@ class Spel {
   // tekenStartScherm() {
   //   background('#ba087d');
   //   this.tekenScorebord();
-  //   this.tekenTekst('Klaar om te beginnen?\nDruk spatie om te starten','white');
+  //   this.tekenTekst('Klaar om te spelen?\nDruk spatie om te starten','white');
   // }
 
   tekenSpeelScherm() {
@@ -83,12 +84,14 @@ class Spel {
   }
 
   teken() {
-    if (this.toestand == 'begin') {
-      this.tekenBeginScherm();
+    if (this.toestand == 'homescreen') {
+      this.tekenHomeScreen();
     }
 
     if (this.toestand == 'spelen') {
       this.tekenSpeelScherm();
+      this.speler.beweeg();
+      this.speler.teken();
     }
 
     if (this.toestand == 'einde') {

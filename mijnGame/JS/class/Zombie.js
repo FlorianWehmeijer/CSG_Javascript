@@ -1,7 +1,7 @@
 class Zombie {
     constructor() {
-        this.x = random(50,600);
-        this.y = random(50,600);
+        this.x = random(50,1150);
+        this.y = random(50,750);
         this.snelheid = 0.75;
         this.geraakt = false;
     }

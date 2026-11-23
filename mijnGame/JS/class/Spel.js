@@ -5,7 +5,7 @@ class Spel {
     this.score = null;
     this.toestand = null;
     this.speler = new Speler();
-    this.aantalZombies = 2;
+    this.aantalZombies = 5;
   }
 
   nieuwSpel() {
@@ -17,9 +17,10 @@ class Spel {
   }
 
   nieuwWave() {
+    this.wave += 1;
     this.zombieLijst = [];
     for (var b = 0;b<this.aantalZombies;b++) {
-      this.zombieLijst.push(new Zombie())
+      this.zombieLijst.push(new Zombie());
     }
   }
   
@@ -44,6 +45,13 @@ class Spel {
         this.nieuwSpel();
       }
     }
+
+    if (this.toestand == 'spelen') {
+      if (keyCode == 32) {
+        this.zombieLijst.push(new Zombie());
+        this.aantalZombies ++;
+      }
+   }
   }
 
   tekenScorebord() {
@@ -70,9 +78,34 @@ class Spel {
     pop();
   }
 
+  tekenKnop(x,y,breedte,hoogte,tekst,toestand) {
+    push();
+    fill('white');
+    rect(x, y, breedte, hoogte);
+
+    fill('black');
+    textSize(25);
+    textAlign(CENTER, CENTER);
+    text(tekst, x+0.5*breedte, y+0.5*hoogte);
+
+    if (mouseIsPressed == true && mouseX > x && mouseX < x+breedte && mouseY > y && mouseY < y+hoogte) {
+      this.toestand = toestand;
+    }
+    pop();
+  }
+
   tekenHomeScreen() {
     background('#fec013');
     this.tekenTekst('Klaar voor het spel?\nDruk spatie om te starten','black');
+    this.tekenKnop(500,300,200,60,'START','spelen');
+    this.tekenKnop(1100,700,50,50,'?','hulpmenu');
+  }
+
+  tekenHulpMenu() {
+    background('#fec013');
+    rect(75,75,1050,650);
+    this.tekenTekst('HULPMENU','black');
+    this.tekenKnop(100,100,50,50,'↩','homescreen');
   }
 
   tekenSpeelScherm() {
@@ -84,13 +117,16 @@ class Spel {
   tekenEindScherm() {
     background('#B50016');
     this.tekenTekst('Je bent doodgegaan!\nJe score: '+this.score+'.\n\nDruk op n om een nieuw spel te starten','white');
+    this.tekenKnop(450,50,300,60,'Terug naar startscherm','homescreen');
   }
 
   teken() {
     if (this.toestand == 'homescreen') {
       this.tekenHomeScreen();
     }
-    
+    if (this.toestand == 'hulpmenu') {
+      this.tekenHulpMenu();
+    }
     if (this.toestand == 'spelen') {
       this.tekenSpeelScherm();
       for (var b = 0;b<this.aantalZombies;b++) {

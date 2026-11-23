@@ -1,19 +1,37 @@
 
 class Spel {
   constructor() {
-    this.level = null;
+    this.wave = null;
     this.score = null;
     this.toestand = null;
     this.speler = new Speler();
+    this.aantalZombies = 2;
   }
 
   nieuwSpel() {
-    this.wave = 1;
+    this.wave = 0;
     this.score = 0;
     this.toestand = 'homescreen';
+    this.nieuwWave();
   }
 
+  nieuwWave() {
+    this.zombieLijst = [];
+    for (var b = 0;b<this.aantalZombies;b++) {
+      this.zombieLijst.push(new Zombie())
+    }
+  }
 
+  wordtGeraakt() {
+      if (this.speler.x == this.zombieLijst[1].x && this.speler.y == this.zombieLijst[1].y) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+
+  
   verwerkInvoer() {
     console.log('key: '+key+'   keyCode: '+keyCode);
 
@@ -66,12 +84,6 @@ class Spel {
     this.tekenTekst('Klaar voor het spel?\nDruk spatie om te starten','black');
   }
 
-  // tekenStartScherm() {
-  //   background('#ba087d');
-  //   this.tekenScorebord();
-  //   this.tekenTekst('Klaar om te spelen?\nDruk spatie om te starten','white');
-  // }
-
   tekenSpeelScherm() {
     background('#38dd5c');
     this.tekenScorebord();
@@ -87,13 +99,17 @@ class Spel {
     if (this.toestand == 'homescreen') {
       this.tekenHomeScreen();
     }
-
+    
     if (this.toestand == 'spelen') {
       this.tekenSpeelScherm();
+      for (var b = 0;b<this.aantalZombies;b++) {
+      this.zombieLijst[b].beweeg();
+      this.zombieLijst[b].teken();
+      }
       this.speler.beweeg();
       this.speler.teken();
+      this.wordtGeraakt();
     }
-
     if (this.toestand == 'einde') {
       this.tekenEindScherm();
     }

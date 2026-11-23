@@ -7,6 +7,7 @@ class Speler {
     // this.animatie = [];
     // this.frameNummer =  3;
     this.stapGrootte = 4;
+    
   }
   
   beweeg() {
@@ -26,12 +27,13 @@ class Speler {
       this.y += this.stapGrootte;
     //   this.frameNummer = 5;
     }
-    
-    this.x = constrain(this.x,0,canvas.width);
-    this.y = constrain(this.y,0,canvas.height - 25);
+
+    this.x = constrain(this.x,25,canvas.width-25);
+    this.y = constrain(this.y,25,canvas.height - 25);
     }
   
   teken() {
+    fill('white');
     circle(this.x, this.y, 50);
   }
 

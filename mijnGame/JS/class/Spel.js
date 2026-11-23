@@ -13,6 +13,7 @@ class Spel {
     this.score = 0;
     this.toestand = 'homescreen';
     this.nieuwWave();
+    this.speler.health = 100;
   }
 
   nieuwWave() {
@@ -21,16 +22,6 @@ class Spel {
       this.zombieLijst.push(new Zombie())
     }
   }
-
-  wordtGeraakt() {
-      if (this.speler.x == this.zombieLijst[1].x && this.speler.y == this.zombieLijst[1].y) {
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
-
   
   verwerkInvoer() {
     console.log('key: '+key+'   keyCode: '+keyCode);
@@ -65,7 +56,7 @@ class Spel {
     textAlign(LEFT);
     text('Score: '+this.score,10,20);
     textAlign(RIGHT);
-    text('❤ ❤ ❤ ❤ ❤',canvas.width - 10,20);
+    text(this.speler.health + '/' + this.speler.maxhealth + ' ❤️',canvas.width - 5,17.5);
     pop();
   }
 
@@ -103,12 +94,15 @@ class Spel {
     if (this.toestand == 'spelen') {
       this.tekenSpeelScherm();
       for (var b = 0;b<this.aantalZombies;b++) {
-      this.zombieLijst[b].beweeg();
+      this.zombieLijst[b].beweeg(this.speler);
       this.zombieLijst[b].teken();
+      this.zombieLijst[b].wordtGeraakt(this.speler);
       }
       this.speler.beweeg();
       this.speler.teken();
-      this.wordtGeraakt();
+      if (this.speler.health < 0) {
+        this.toestand = 'einde'
+      }
     }
     if (this.toestand == 'einde') {
       this.tekenEindScherm();

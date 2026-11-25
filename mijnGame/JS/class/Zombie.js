@@ -4,6 +4,9 @@ class Zombie {
         this.y = random(50,750);
         this.snelheid = 0.75;
         this.geraakt = false;
+        this.currentTime = null;
+        this.laasteKeerDamage = -1000;
+        this.damageDelay = 1000;
     }
 
     teken() {
@@ -24,6 +27,8 @@ class Zombie {
     }
 
     wordtGeraakt(speler) {
+      this.currentTime = millis();
+      
       if (dist(this.x,this.y,speler.x,speler.y)<50) {
         this.geraakt = true;
       }
@@ -32,7 +37,10 @@ class Zombie {
       }
 
       if (this.geraakt == true) {
-        speler.health -= 1;
+        if (this.currentTime - this.laasteKeerDamage > this.damageDelay) {
+        speler.health -= 10;
+        this.laasteKeerDamage = millis();
+        }
       }
     }
 }

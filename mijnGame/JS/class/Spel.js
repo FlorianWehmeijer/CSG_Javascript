@@ -5,7 +5,11 @@ class Spel {
     this.score = null;
     this.toestand = null;
     this.speler = new Speler();
-    this.aantalZombies = 5;
+    this.aantalZombies = 2;
+    this.maxAantalZombies = 10;
+    this.currentTime = null;
+    this.laasteKeerGespawned = -1000;
+    this.spawnDelay = 3000;
   }
 
   nieuwSpel() {
@@ -45,13 +49,6 @@ class Spel {
         this.nieuwSpel();
       }
     }
-
-    if (this.toestand == 'spelen') {
-      if (keyCode == 32) {
-        this.zombieLijst.push(new Zombie());
-        this.aantalZombies ++;
-      }
-   }
   }
 
   tekenScorebord() {
@@ -62,7 +59,7 @@ class Spel {
     fill('black');
     textSize(16);
     textAlign(LEFT);
-    text('Score: '+this.score,10,20);
+    text('Score: '+this.score + '   Wave '+this.wave,10,20);
     textAlign(RIGHT);
     text(this.speler.health + '/' + this.speler.maxhealth + ' ❤️',canvas.width - 5,17.5);
     pop();
@@ -78,7 +75,7 @@ class Spel {
     pop();
   }
 
-  tekenKnop(x,y,breedte,hoogte,tekst,toestand) {
+  tekenKnop(x,y,breedte,hoogte,tekst) {
     push();
     fill('white');
     rect(x, y, breedte, hoogte);
@@ -121,6 +118,7 @@ class Spel {
   }
 
   teken() {
+    this.currentTime = millis();
     if (this.toestand == 'homescreen') {
       this.tekenHomeScreen();
     }
@@ -134,9 +132,18 @@ class Spel {
       this.zombieLijst[b].teken();
       this.zombieLijst[b].wordtGeraakt(this.speler);
       }
+      if (this.toestand == 'spelen') {
+        if (this.aantalZombies < this.maxAantalZombies) {
+          if (this.currentTime - this.laasteKeerGespawned > this.spawnDelay) {
+            this.zombieLijst.push(new Zombie());
+            this.aantalZombies ++;
+            this.laasteKeerGespawned = millis();
+          }
+        }
+      }
       this.speler.beweeg();
       this.speler.teken();
-      if (this.speler.health < 0) {
+      if (this.speler.health <= 0) {
         this.toestand = 'einde'
       }
     }

@@ -132,3 +132,6 @@ this.beweegZombies();
 
 
 Let op: speler moet hier verwijzen naar jouw bestaande spelerobject.
+
+
+https://www.w3schools.com/js/js_timers.asp

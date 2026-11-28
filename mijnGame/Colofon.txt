@@ -1,137 +1,141 @@
-Promt: Ik ben een 2d zombieshooter aan het maken. hoe kan ik ervoor zorgen dat de zombies naar de speler toebewegen?
-Antwoord: 
-Het principe is eigenlijk heel simpel: iedere zombie kijkt waar de speler staat, berekent de richting en zet vervolgens iedere frame een klein stapje in die richting.
-1. De positie van de zombie en speler
-Stel dat je speler en zombie allebei een x- en y-positie hebben.
+Zombie naar speler bewegen met chatgpt:
+    Promt: Ik ben een 2d zombieshooter aan het maken. hoe kan ik ervoor zorgen dat de zombies naar de speler toebewegen?
+    Antwoord: 
+    Het principe is eigenlijk heel simpel: iedere zombie kijkt waar de speler staat, berekent de richting en zet vervolgens iedere frame een klein stapje in die richting.
+    1. De positie van de zombie en speler
+    Stel dat je speler en zombie allebei een x- en y-positie hebben.
 
-Bijvoorbeeld:
-Voorbeeld van een spelwereld
-De zombie staat op (100, 100) en de speler op (300, 200).
-De zombie moet dus naar rechts en naar beneden bewegen.
-2. Bereken het verschil tussen de posities
-Daarvoor gebruiken we twee variabelen:
-var dx = speler.x - this.x;
-var dy = speler.y - this.y;
-
-
-Wat gebeurt hier?
-
-dx (verschil in de x-richting):
-
-De speler staat op x = 300 en de zombie op x = 100.
-
-Dus:
-\[
-dx = 300 - 100 = 200
-\]
-
-dy (verschil in de y-richting):
-
-De speler staat op y = 200 en de zombie op y = 100.
-
-Dus:
-\[
-dy = 200 - 100 = 100
-\]
-
-We weten nu dat de zombie 200 pixels naar rechts en 100 pixels naar beneden moet om bij de speler te komen.
-3. Bereken de afstand
-Nu weten we de richting, maar nog niet hoe ver de speler van de zombie af staat.
-
-Daarvoor gebruiken we de stelling van Pythagoras:
-\[
-afstand = \sqrt{dx^2 + dy^2}
-\]
-
-In JavaScript:
-var afstand = Math.sqrt(dx * dx + dy * dy);
-
-
-Met onze getallen:
-\[
-afstand = \sqrt{200^2 + 100^2}
-\]
-
-\[
-afstand = \sqrt{50000} \approx 223,6
-\]
-
-De zombie staat dus ongeveer 223,6 pixels van de speler af.
-4. Waarom delen we door de afstand?
-Dit is het belangrijkste gedeelte!
-
-We willen dat de zombie niet ineens 200 pixels naar rechts en 100 pixels naar beneden beweegt. We willen dat hij bijvoorbeeld maar 1 pixel per frame beweegt.
-
-Daarom delen we dx en dy door de totale afstand:
-var richtingX = dx / afstand;
-var richtingY = dy / afstand;
-
-
-Met onze getallen:
-\[
-richtingX = 200 / 223,6 \approx 0,894
-\]
-
-\[
-richtingY = 100 / 223,6 \approx 0,447
-\]
-
-We hebben nu een richting berekend die een totale lengte van 1 heeft.
-
-Dit heet normaliseren.
-
-Waarom doen we dit? Omdat de zombie hierdoor altijd met dezelfde snelheid kan bewegen, ongeacht hoe ver hij van de speler af staat.
-5. Laat de zombie daadwerkelijk bewegen
-Nu hoeven we alleen nog maar de richting bij de positie van de zombie op te tellen.
-this.x += richtingX * 1;
-this.y += richtingY * 1;
-
-
-De 1 is de snelheid van de zombie.
-
-De nieuwe positie wordt ongeveer:
-- X: 100 + 0,894 = 100,894
-- Y: 100 + 0,447 = 100,447
-De zombie is dus een klein stukje dichter bij de speler gekomen!
-
-Bij iedere volgende frame wordt dit opnieuw berekend. Daardoor blijft de zombie de speler achtervolgen, ook als de speler beweegt.
-6. De volledige code in Zombie.js
-Dit is alles bij elkaar:
-beweeg(speler) {
-
+    Bijvoorbeeld:
+    Voorbeeld van een spelwereld
+    De zombie staat op (100, 100) en de speler op (300, 200).
+    De zombie moet dus naar rechts en naar beneden bewegen.
+    2. Bereken het verschil tussen de posities
+    Daarvoor gebruiken we twee variabelen:
     var dx = speler.x - this.x;
     var dy = speler.y - this.y;
 
+
+    Wat gebeurt hier?
+
+    dx (verschil in de x-richting):
+
+    De speler staat op x = 300 en de zombie op x = 100.
+
+    Dus:
+    \[
+    dx = 300 - 100 = 200
+    \]
+
+    dy (verschil in de y-richting):
+
+    De speler staat op y = 200 en de zombie op y = 100.
+
+    Dus:
+    \[
+    dy = 200 - 100 = 100
+    \]
+
+    We weten nu dat de zombie 200 pixels naar rechts en 100 pixels naar beneden moet om bij de speler te komen.
+    3. Bereken de afstand
+    Nu weten we de richting, maar nog niet hoe ver de speler van de zombie af staat.
+
+    Daarvoor gebruiken we de stelling van Pythagoras:
+    \[
+    afstand = \sqrt{dx^2 + dy^2}
+    \]
+
+    In JavaScript:
     var afstand = Math.sqrt(dx * dx + dy * dy);
 
-    if (afstand > 0) {
 
-        this.x += (dx / afstand) * 1;
-        this.y += (dy / afstand) * 1;
+    Met onze getallen:
+    \[
+    afstand = \sqrt{200^2 + 100^2}
+    \]
+
+    \[
+    afstand = \sqrt{50000} \approx 223,6
+    \]
+
+    De zombie staat dus ongeveer 223,6 pixels van de speler af.
+    4. Waarom delen we door de afstand?
+    Dit is het belangrijkste gedeelte!
+
+    We willen dat de zombie niet ineens 200 pixels naar rechts en 100 pixels naar beneden beweegt. We willen dat hij bijvoorbeeld maar 1 pixel per frame beweegt.
+
+    Daarom delen we dx en dy door de totale afstand:
+    var richtingX = dx / afstand;
+    var richtingY = dy / afstand;
+
+
+    Met onze getallen:
+    \[
+    richtingX = 200 / 223,6 \approx 0,894
+    \]
+
+    \[
+    richtingY = 100 / 223,6 \approx 0,447
+    \]
+
+    We hebben nu een richting berekend die een totale lengte van 1 heeft.
+
+    Dit heet normaliseren.
+
+    Waarom doen we dit? Omdat de zombie hierdoor altijd met dezelfde snelheid kan bewegen, ongeacht hoe ver hij van de speler af staat.
+    5. Laat de zombie daadwerkelijk bewegen
+    Nu hoeven we alleen nog maar de richting bij de positie van de zombie op te tellen.
+    this.x += richtingX * 1;
+    this.y += richtingY * 1;
+
+
+    De 1 is de snelheid van de zombie.
+
+    De nieuwe positie wordt ongeveer:
+    - X: 100 + 0,894 = 100,894
+    - Y: 100 + 0,447 = 100,447
+    De zombie is dus een klein stukje dichter bij de speler gekomen!
+
+    Bij iedere volgende frame wordt dit opnieuw berekend. Daardoor blijft de zombie de speler achtervolgen, ook als de speler beweegt.
+    6. De volledige code in Zombie.js
+    Dit is alles bij elkaar:
+    beweeg(speler) {
+
+        var dx = speler.x - this.x;
+        var dy = speler.y - this.y;
+
+        var afstand = Math.sqrt(dx * dx + dy * dy);
+
+        if (afstand > 0) {
+
+            this.x += (dx / afstand) * 1;
+            this.y += (dy / afstand) * 1;
+
+        }
+    }
+
+
+    De if (afstand > 0) voorkomt dat we door nul delen wanneer de zombie precies op dezelfde positie staat als de speler.
+    7. Hoe roep je dit aan vanuit Spel.js?
+    Je hebt je losse array zombieArray. Daarmee kun je alle zombies laten bewegen:
+    beweegZombies() {
+
+        for (var i = 0; i < zombieArray.length; i++) {
+
+            zombieArray[i].beweeg(speler);
+
+        }
 
     }
-}
 
 
-De if (afstand > 0) voorkomt dat we door nul delen wanneer de zombie precies op dezelfde positie staat als de speler.
-7. Hoe roep je dit aan vanuit Spel.js?
-Je hebt je losse array zombieArray. Daarmee kun je alle zombies laten bewegen:
-beweegZombies() {
-
-    for (var i = 0; i < zombieArray.length; i++) {
-
-        zombieArray[i].beweeg(speler);
-
-    }
-
-}
+    En in je teken()-functie roep je dit iedere frame aan wanneer het spel bezig is:
+    this.beweegZombies();
 
 
-En in je teken()-functie roep je dit iedere frame aan wanneer het spel bezig is:
-this.beweegZombies();
+    Let op: speler moet hier verwijzen naar jouw bestaande spelerobject.
 
-
-Let op: speler moet hier verwijzen naar jouw bestaande spelerobject.
-
-
+Delays:
 https://www.w3schools.com/js/js_timers.asp
+
+item uit array verwijderen: 
+https://www.w3schools.com/jsref/jsref_splice.asp
